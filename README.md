@@ -5,6 +5,7 @@ A command-line tool that automatically organizes messy folders. Reads all direct
 The program has 2 modes, Preview mode for changes made to directory without moving files or creating folders, and Organize mode for relocating files to appropriate folders based on file extension.
 
 Preview mode:  ./organizer --preview /folder
+
 Organize mode: ./organizer /folder
 
 ## Categories and file extensions 
