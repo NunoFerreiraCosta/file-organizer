@@ -46,6 +46,9 @@ int organize_files (char *folder)
 
     struct dirent *entry;
     int empty = 1;
+    int count = 0;
+
+    printf("Organizing: %s\n", folder);
 
     // Organize every file to dedicated folder
     while ((entry = readdir(mainFolder)) != NULL)
@@ -128,6 +131,9 @@ int organize_files (char *folder)
         sprintf(src, "%s/%s", folder, entry->d_name);
         snprintf(dest, PATH_MAX * 2, "%s/%s", dir_path, entry->d_name);
         rename(src, dest);
+
+        printf(" %s -> %s\n", entry->d_name, dir_path);
+        count++;
     }
 
     if (empty == 1)
@@ -136,6 +142,8 @@ int organize_files (char *folder)
         closedir(mainFolder);
         return 3;
     }
+
+    printf("Successfully organized %i files!\n", count);
 
     closedir(mainFolder);
     return 0;
