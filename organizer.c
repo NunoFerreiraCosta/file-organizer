@@ -4,7 +4,7 @@
 #include <string.h>
 #include <sys/stat.h>
 
-int organize_files (char *folder);
+int organize_preview_files (char *folder, int preview);
 
 int main (int argc, char *argv[])
 {
@@ -16,25 +16,31 @@ int main (int argc, char *argv[])
         return 1;
     }
 
-    // Preview mode TODO
+    int returnOrganize = 0;
+    
     if (argc == 3)
     {
-        // Handle user input incorrectness
-        if (strcmp(argv[1], "--preview") != 0)
+        if (strcmp(argv[1], "--preview") == 0)
+        {
+            returnOrganize = organize_preview_files(argv[2], 1);
+            return returnOrganize;
+        }
+        else
         {
             printf("Usage: ./organizer /folder\n");
             printf("       ./organizer --preview /folder\n");
             return 1;
         }
-
-        // TODO
     }
-
-    int returnOrganize = organize_files(argv[1]);
-    return returnOrganize;
+    else
+    {
+        returnOrganize = organize_preview_files(argv[1], 0);
+        return returnOrganize;
+    }
 }
 
-int organize_files (char *folder)
+// Organize/Preview files in directory
+int organize_preview_files (char *folder, int preview)
 {
     // Open prompted folder and handle error
     DIR *mainFolder = opendir(folder);
@@ -48,9 +54,16 @@ int organize_files (char *folder)
     int empty = 1;
     int count = 0;
 
-    printf("Organizing: %s\n", folder);
+    if (preview)
+    {
+        printf("Preview: %s\n", folder);
+    }
+    else
+    {
+        printf("Organizing: %s\n", folder);
+    }
 
-    // Organize every file to dedicated folder
+    // Organize every file to dedicated folder or preview changes to directory
     while ((entry = readdir(mainFolder)) != NULL)
     {
         char *ext = strrchr(entry->d_name, '.');
@@ -126,13 +139,24 @@ int organize_files (char *folder)
             category = "Other";  // catch all unrecognized extensions
         }
 
+        // Build directory pathh for both organize mode and preview mode
         sprintf(dir_path, "%s/%s", folder, category);
-        mkdir(dir_path, 0777);
-        sprintf(src, "%s/%s", folder, entry->d_name);
-        snprintf(dest, PATH_MAX * 2, "%s/%s", dir_path, entry->d_name);
-        rename(src, dest);
 
-        printf(" %s -> %s\n", entry->d_name, dir_path);
+        if (preview)
+        {
+            // Preview changes in directory
+            printf(" %s -> %s\n", entry->d_name, dir_path);
+        }
+        else
+        {
+            // Organize files in directory
+            mkdir(dir_path, 0777);
+            sprintf(src, "%s/%s", folder, entry->d_name);
+            snprintf(dest, PATH_MAX * 2, "%s/%s", dir_path, entry->d_name);
+            rename(src, dest);
+            printf(" %s -> %s\n", entry->d_name, dir_path);
+        }
+
         count++;
     }
 
@@ -143,7 +167,14 @@ int organize_files (char *folder)
         return 3;
     }
 
-    printf("Successfully organized %i files!\n", count);
+    if (preview)
+    {
+        printf("Preview: would organize %i files!\n", count);
+    }
+    else
+    {
+        printf("Successfully organized %i files!\n", count);
+    }
 
     closedir(mainFolder);
     return 0;
