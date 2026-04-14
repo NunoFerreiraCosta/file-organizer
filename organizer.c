@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 int organize_preview_files (char *folder, int preview);
 
@@ -139,7 +140,7 @@ int organize_preview_files (char *folder, int preview)
             category = "Other";  // catch all unrecognized extensions
         }
 
-        // Build directory pathh for both organize mode and preview mode
+        // Build directory path for both organize mode and preview mode
         sprintf(dir_path, "%s/%s", folder, category);
 
         if (preview)
@@ -153,8 +154,33 @@ int organize_preview_files (char *folder, int preview)
             mkdir(dir_path, 0777);
             sprintf(src, "%s/%s", folder, entry->d_name);
             snprintf(dest, PATH_MAX * 2, "%s/%s", dir_path, entry->d_name);
-            rename(src, dest);
-            printf(" %s -> %s\n", entry->d_name, dir_path);
+            // Prevent file overwrite
+            if (access(dest, F_OK) == 0)
+            {
+                // Strip ext from entry->d_name
+                int name_len = ext - entry->d_name;
+                char name[256];
+                strncpy(name, entry->d_name, name_len);
+                name[name_len] = '\0';
+
+                // Rename file as a copy (1), (2)...(12), e.t.c
+                int n = 1;
+                char new_dest[PATH_MAX * 2];
+                do
+                {
+                    sprintf(new_dest, "%s/%s (%d)%s", dir_path, name, n, ext);
+                    n++;
+                } while (access(new_dest, F_OK) == 0);
+                rename(src, new_dest);
+                char new_name[PATH_MAX];
+                sprintf(new_name, "%s (%d)%s", name, n - 1, ext);
+                printf(" %s -> %s   (renamed: %s)\n", entry->d_name, dir_path, new_name);
+            }
+            else
+            {
+                rename(src, dest);
+                printf(" %s -> %s\n", entry->d_name, dir_path);
+            }
         }
 
         count++;

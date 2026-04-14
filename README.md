@@ -18,11 +18,11 @@ Organize mode:
 The program has 6 categories that stores files with certain file extensions.
 
 Categories:
- - Images (".jpg";".jpeg";".png")
- - Documents (".pdf";".doc";".docx";".xls";".xlsx";".ppt";".pptx";".odt";".txt";"rtf")
- - Music (".mp3";".wav")
- - Videos (".mp4";".mov";".mkv";".wmv")
- - Code (".py";".java";".c";".cpp";".cc";".cs";".swift";".go";".rs";".js")
+ - Images .jpg .jpeg .png
+ - Documents .pdf .doc .docx .xls .xlsx .ppt .pptx .odt .txt rtf
+ - Music .mp3 .wav
+ - Videos .mp4 .mov .mkv .wmv
+ - Code .py .java .c .cpp .cc .cs .swift .go .rs .js
  - Other (Files with no extensions or unsupported extensions)
 
 ## Examples
