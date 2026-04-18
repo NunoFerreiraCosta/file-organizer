@@ -80,11 +80,6 @@ int organize_preview_files (char *folder, int preview)
         char src[PATH_MAX];
         char *category;
         char ext_lower[16];
-        for (int i = 0; ext[i]; i++)
-        {
-            ext_lower[i] = tolower(ext[i]);
-        }
-        ext_lower[strlen(ext)] = '\0';
 
         // skip . and ..
         if (entry->d_name[0] == '.')
@@ -100,6 +95,20 @@ int organize_preview_files (char *folder, int preview)
 
         // If found file otherwise empty will still be 1
         empty = 0;
+
+        // Make ext lowercase for sorting in categories
+        if (ext == NULL)
+        {
+            ext_lower[0] = '\0';
+        }
+        else
+        {
+            for (int i = 0; ext[i]; i++)
+            {
+                ext_lower[i] = tolower(ext[i]);
+            }
+            ext_lower[strlen(ext)] = '\0';
+        }
 
         if (ext == NULL)
         {
@@ -124,7 +133,9 @@ int organize_preview_files (char *folder, int preview)
         {
             category = "Documents";
         }
-        else if (strcmp(ext_lower, ".mp3") == 0 || strcmp(ext_lower, ".wav") == 0)
+        else if (strcmp(ext_lower, ".mp3") == 0 || 
+                 strcmp(ext_lower, ".wav") == 0 ||
+                 strcmp(ext_lower, ".m4a") == 0)
         {
             category = "Music";
         }
