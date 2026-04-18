@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <dirent.h>
 #include <limits.h>
 #include <stdio.h>
@@ -78,6 +79,12 @@ int organize_preview_files (char *folder, int preview)
         char dir_path[PATH_MAX];
         char src[PATH_MAX];
         char *category;
+        char ext_lower[16];
+        for (int i = 0; ext[i]; i++)
+        {
+            ext_lower[i] = tolower(ext[i]);
+        }
+        ext_lower[strlen(ext)] = '\0';
 
         // skip . and ..
         if (entry->d_name[0] == '.')
@@ -98,46 +105,46 @@ int organize_preview_files (char *folder, int preview)
         {
             category = "Other";
         }
-        else if (strcmp(ext, ".jpg") == 0 || 
-                 strcmp(ext, ".jpeg") == 0 || 
-                 strcmp(ext, ".png") == 0)
+        else if (strcmp(ext_lower, ".jpg") == 0 || 
+                 strcmp(ext_lower, ".jpeg") == 0 || 
+                 strcmp(ext_lower, ".png") == 0)
         {
             category = "Images";
         }
-        else if (strcmp(ext, ".pdf") == 0 || 
-                 strcmp(ext, ".doc") == 0 || 
-                 strcmp(ext, ".docx") == 0 ||
-                 strcmp(ext, ".xls") == 0 ||
-                 strcmp(ext, ".xlsx") == 0 ||
-                 strcmp(ext, ".ppt") == 0 ||
-                 strcmp(ext, ".pptx") == 0 ||
-                 strcmp(ext, ".odt") == 0 ||
-                 strcmp(ext, ".txt") == 0 ||
-                 strcmp(ext, ".rtf") == 0)
+        else if (strcmp(ext_lower, ".pdf") == 0 || 
+                 strcmp(ext_lower, ".doc") == 0 || 
+                 strcmp(ext_lower, ".docx") == 0 ||
+                 strcmp(ext_lower, ".xls") == 0 ||
+                 strcmp(ext_lower, ".xlsx") == 0 ||
+                 strcmp(ext_lower, ".ppt") == 0 ||
+                 strcmp(ext_lower, ".pptx") == 0 ||
+                 strcmp(ext_lower, ".odt") == 0 ||
+                 strcmp(ext_lower, ".txt") == 0 ||
+                 strcmp(ext_lower, ".rtf") == 0)
         {
             category = "Documents";
         }
-        else if (strcmp(ext, ".mp3") == 0 || strcmp(ext, ".wav") == 0)
+        else if (strcmp(ext_lower, ".mp3") == 0 || strcmp(ext_lower, ".wav") == 0)
         {
             category = "Music";
         }
-        else if (strcmp(ext, ".mp4") == 0 || 
-                 strcmp(ext, ".mov") == 0 || 
-                 strcmp(ext, ".mkv") == 0 ||
-                 strcmp(ext, ".wmv") == 0)
+        else if (strcmp(ext_lower, ".mp4") == 0 || 
+                 strcmp(ext_lower, ".mov") == 0 || 
+                 strcmp(ext_lower, ".mkv") == 0 ||
+                 strcmp(ext_lower, ".wmv") == 0)
         {
             category = "Videos";
         }
-        else if (strcmp(ext, ".py") == 0 || 
-                 strcmp(ext, ".java") == 0 || 
-                 strcmp(ext, ".c") == 0 ||
-                 strcmp(ext, ".cpp") == 0 ||
-                 strcmp(ext, ".cc") == 0 ||
-                 strcmp(ext, ".cs") == 0 ||
-                 strcmp(ext, ".swift") == 0 ||
-                 strcmp(ext, ".go") == 0 ||
-                 strcmp(ext, ".rs") == 0 ||
-                 strcmp(ext, ".js") == 0)
+        else if (strcmp(ext_lower, ".py") == 0 || 
+                 strcmp(ext_lower, ".java") == 0 || 
+                 strcmp(ext_lower, ".c") == 0 ||
+                 strcmp(ext_lower, ".cpp") == 0 ||
+                 strcmp(ext_lower, ".cc") == 0 ||
+                 strcmp(ext_lower, ".cs") == 0 ||
+                 strcmp(ext_lower, ".swift") == 0 ||
+                 strcmp(ext_lower, ".go") == 0 ||
+                 strcmp(ext_lower, ".rs") == 0 ||
+                 strcmp(ext_lower, ".js") == 0)
         {
             category = "Code";
         }
